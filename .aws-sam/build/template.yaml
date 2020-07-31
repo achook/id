@@ -1,16 +1,18 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: 'SAM template for the "id" project'
+Description: 'id
 
+  Sample SAM Template for id
+
+  '
 Globals:
   Function:
     Timeout: 3
-
 Resources:
   TrackingFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: tracking/
+      CodeUri: TrackingFunction
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Events:
@@ -21,13 +23,14 @@ Resources:
             Method: get
       Environment:
         Variables:
-          TABLE_NAME: !Ref TrackingDB
+          TABLE_NAME:
+            Ref: TrackingDB
       Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref TrackingDB
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: TrackingDB
     DependsOn:
-      - TrackingDB
-
+    - TrackingDB
   TrackingDB:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -35,18 +38,17 @@ Resources:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 4
       AttributeDefinitions:
-        - AttributeName: timestamp
-          AttributeType: N
-        - AttributeName: uuid
-          AttributeType: S
+      - AttributeName: timestamp
+        AttributeType: N
+      - AttributeName: uuid
+        AttributeType: S
       KeySchema:
-        - AttributeName: timestamp
-          KeyType: HASH
-        - AttributeName: uuid
-          KeyType: RANGE
-      
-
+      - AttributeName: timestamp
+        KeyType: HASH
+      - AttributeName: uuid
+        KeyType: RANGE
 Outputs:
-  TrackingFunction:
-    Description: "API Gateway endpoint URL for Prod stage for the tracking function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+  HelloWorldApi:
+    Description: API Gateway endpoint URL for Prod stage for Hello World function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/
