@@ -1,17 +1,20 @@
 {
-  "name": "hello_world",
+  "name": "id",
   "version": "1.0.0",
-  "description": "hello world sample for NodeJS",
+  "description": "Simple tracking & analytics",
   "main": "app.js",
-  "repository": "https://github.com/awslabs/aws-sam-cli/tree/develop/samcli/local/init/templates/cookiecutter-aws-sam-hello-nodejs",
-  "author": "SAM CLI",
+  "repository": "https://github.com/achook/id",
+  "author": "achook",
   "license": "MIT",
   "dependencies": {
     "aws-sdk": "^2.721.0",
     "uuid": "^8.3.0"
   },
   "scripts": {
-    "test": "mocha tests/unit/"
+    "test": "mocha tests/unit/",
+    "build": "sam build --use-container",
+    "deploy": "sam build --use-container && sam deploy",
+    "dev": "sam build --use-container && sam local start-api"
   },
   "devDependencies": {
     "chai": "^4.2.0",
