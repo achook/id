@@ -4,11 +4,12 @@ const AWS = require('aws-sdk')
 const db = new AWS.DynamoDB({apiVersion: '2012-08-10'})
 
 exports.lambdaHandler = async (event, context) => {
-    const ip = event['requestContext']['identity']['sourceIp']
-    const countryCode = event['headers']['CloudFront-Viewer-Country']
-    const uuid = uuidv4()
-    const userAgent = event['requestContext']['identity']['userAgent']
     const timestamp = Math.floor(new Date() / 1000).toString()
+    const uuid = uuidv4()
+
+    const ip = event['headers']['X-Forwarded-For'].split(', ').pop()
+    const countryCode = event['headers']['CloudFront-Viewer-Country']
+    const userAgent = event['requestContext']['identity']['userAgent']
 
     const params = {
         'TableName': process.env['TABLE_NAME'],
@@ -32,9 +33,8 @@ exports.lambdaHandler = async (event, context) => {
 
     let response = {
         'statusCode': 500,
-        'body': JSON.stringify({
-            'error': 'Unknown error'
-        }, null, 2)
+        'headers': { 'Access-Control-Allow-Origin': '*' },
+        'body': JSON.stringify({ 'error': 'Unknown error' }, null, 2)
     }
 
     try {
@@ -42,11 +42,13 @@ exports.lambdaHandler = async (event, context) => {
 
         response = {
             'statusCode': 200,
+            'headers': { 'Access-Control-Allow-Origin': '*' },
             'body': JSON.stringify(data, null, 2)
         }
     } catch (err) {
         response = {
             'statusCode': 500,
+            'headers': { 'Access-Control-Allow-Origin': '*' },
             'body': JSON.stringify(err, null, 2)
         }
     }
