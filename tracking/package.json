@@ -7,7 +7,7 @@
   "author": "achook",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.721.0",
+    "aws-sdk": "^2.814.0",
     "ua-parser-js": "^0.7.21",
     "uuid": "^8.3.0"
   },
